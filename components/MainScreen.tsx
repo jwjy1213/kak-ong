@@ -49,11 +49,20 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
 
   const onDragEnd = (clientY: number) => {
     if (!dragRef.current || !cardRef.current) return
-    const delta = dragRef.current.startY - clientY
+    const delta = dragRef.current.startY - clientY  // 양수 = 위로, 음수 = 아래로
     const currentH = cardRef.current.getBoundingClientRect().height
     const vh = window.innerHeight
-    // 위로 40px 이상 드래그했거나, 높이가 65% 넘으면 expanded
-    const shouldExpand = delta > 40 || currentH > vh * SNAP_THRESHOLD
+
+    let shouldExpand: boolean
+    if (delta > 40) {
+      shouldExpand = true   // 위로 40px 이상 → 펼치기
+    } else if (delta < -40) {
+      shouldExpand = false  // 아래로 40px 이상 → 닫기
+    } else {
+      // 작은 움직임: 두 스냅 포인트 중간값 기준으로 스냅
+      shouldExpand = currentH > vh * SNAP_THRESHOLD
+    }
+
     snapTo(shouldExpand)
     dragRef.current = null
   }
