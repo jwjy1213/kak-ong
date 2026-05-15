@@ -16,6 +16,16 @@ function select(prop: any): string {
   return prop?.select?.name ?? ''
 }
 
+const REGION_MAP: Record<string, string> = {
+  '영등포·문래': '영등포 · 문래',
+  '홍대·합정·마포': '홍대 · 합정 · 마포',
+  '용산·이태원·한남': '용산 · 이태원 · 한남',
+}
+
+function normalizeRegion(r: string): string {
+  return REGION_MAP[r] ?? r
+}
+
 function checkbox(prop: any): boolean {
   return prop?.checkbox ?? false
 }
@@ -60,7 +70,7 @@ export async function fetchCafes(): Promise<Cafe[]> {
       id: page.id,
       name: str(p['이름']),
       address: str(p['주소']),
-      region: select(p['지역']),
+      region: normalizeRegion(select(p['지역'])),
       lat,
       lng,
       hours: str(p['영업시간']) || undefined,
