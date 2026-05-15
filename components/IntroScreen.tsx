@@ -18,7 +18,7 @@ export default function IntroScreen({ onStart }: Props) {
         </div>
         <h1
           className="text-black text-center leading-tight"
-          style={{ fontSize: 76, fontWeight: 700, letterSpacing: '-0.02em' }}
+          style={{ fontSize: 76, fontWeight: 700, letterSpacing: '-0.02em', fontFamily: 'var(--font-yang)' }}
         >
           칵옹
         </h1>

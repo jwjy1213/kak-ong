@@ -24,11 +24,11 @@ export default function MainScreen({ cafes, location, activeFilters, onBack }: P
           ← 다시 찾기
         </button>
         <div>
-          <p className="text-black leading-tight" style={{ fontSize: 32, fontWeight: 700 }}>
+          <p className="text-black leading-tight" style={{ fontSize: 32, fontWeight: 700, fontFamily: 'var(--font-yang)' }}>
             {location}에서
           </p>
           <div className="flex items-baseline gap-2">
-            <p className="text-black" style={{ fontSize: 32, fontWeight: 700 }}>
+            <p className="text-black" style={{ fontSize: 32, fontWeight: 700, fontFamily: 'var(--font-yang)' }}>
               칵옹하기
             </p>
             <p style={{ fontSize: 20, fontWeight: 500 }}>
