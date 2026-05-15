@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Cafe, FILTERS, FilterKey } from '@/types'
 import KakaoMap from './KakaoMap'
@@ -21,6 +21,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
   const listRef = useRef<HTMLDivElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const expandedRef = useRef(false)
+  const [selectedCafe, setSelectedCafe] = useState<Cafe | null>(null)
 
   const handleScroll = () => {
     if (!listRef.current || !cardRef.current) return
@@ -67,7 +68,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
       <div className="relative flex-1 min-h-0">
         {/* 지도 — 항상 배경에 가득 */}
         <div className="absolute inset-0">
-          <KakaoMap cafes={cafes} region={location} />
+          <KakaoMap cafes={cafes} region={location} focusedCafe={selectedCafe} onMarkerClick={setSelectedCafe} />
         </div>
 
         {/* 바텀시트 카드 — 초기에 MAP_PEEK만 남기고 덮음 */}
@@ -131,7 +132,13 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
             ) : (
               <div className="flex flex-col divide-y divide-[#f4f4f4]">
                 {cafes.map((cafe, i) => (
-                  <CafeCard key={cafe.id} cafe={cafe} index={i} />
+                  <CafeCard
+                    key={cafe.id}
+                    cafe={cafe}
+                    index={i}
+                    selected={selectedCafe?.id === cafe.id}
+                    onSelect={() => setSelectedCafe(prev => prev?.id === cafe.id ? null : cafe)}
+                  />
                 ))}
               </div>
             )}

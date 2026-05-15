@@ -54,7 +54,7 @@ export default function LocationSelect({ selected, onSelect, onBack }: Props) {
               <motion.button
                 key={region}
                 onClick={() => onSelect(region)}
-                className="w-full text-left px-5 flex items-center"
+                className="w-full text-left px-5 flex items-center last:mb-8"
                 style={{
                   height: 80,
                   backgroundColor: isSelected ? '#ffffff' : '#f4f4f4',

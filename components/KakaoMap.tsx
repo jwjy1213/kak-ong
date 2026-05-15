@@ -6,6 +6,7 @@ import { Cafe, REGION_COORDS } from '@/types'
 interface Props {
   cafes: Cafe[]
   region: string
+  focusedCafe?: Cafe | null
   onMarkerClick?: (cafe: Cafe) => void
 }
 
@@ -32,8 +33,9 @@ function loadKakaoScript(): Promise<void> {
   })
 }
 
-export default function KakaoMap({ cafes, region, onMarkerClick }: Props) {
+export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<any>(null)
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -54,6 +56,7 @@ export default function KakaoMap({ cafes, region, onMarkerClick }: Props) {
               center: new window.kakao.maps.LatLng(center.lat, center.lng),
               level: 4,
             })
+            mapRef.current = map
             setStatus('ok')
 
             cafes.forEach((cafe) => {
@@ -78,6 +81,12 @@ export default function KakaoMap({ cafes, region, onMarkerClick }: Props) {
         setErrorMsg(String(e))
       })
   }, [cafes, region, onMarkerClick])
+
+  useEffect(() => {
+    if (!focusedCafe || !mapRef.current) return
+    const position = new window.kakao.maps.LatLng(focusedCafe.lat, focusedCafe.lng)
+    mapRef.current.panTo(position)
+  }, [focusedCafe])
 
   if (!apiKey) {
     return (
