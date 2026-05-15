@@ -24,7 +24,7 @@ function loadKakaoScript(): Promise<void> {
     }
     const script = document.createElement('script')
     script.id = 'kakao-maps-sdk'
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`
     script.async = true
     script.onload = () => resolve()
     script.onerror = () => reject(new Error('카카오 지도 스크립트 로드 실패'))
