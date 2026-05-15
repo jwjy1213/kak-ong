@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function CafeCard({ cafe, index = 0 }: Props) {
-  const mapUrl = cafe.kakao_url ?? `https://map.kakao.com/link/map/${encodeURIComponent(cafe.name)},${cafe.lat},${cafe.lng}`
+  const mapUrl = cafe.kakao_url ?? `https://map.kakao.com/link/map/${cafe.name},${cafe.lat},${cafe.lng}`
 
   return (
     <motion.a
@@ -20,7 +20,6 @@ export default function CafeCard({ cafe, index = 0 }: Props) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 180, damping: 24, delay: index * 0.09 }}
-      whileTap={{ scale: 0.98 }}
     >
       <div
         className="flex-shrink-0 bg-[#d6d6d6]"
