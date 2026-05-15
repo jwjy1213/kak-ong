@@ -1,6 +1,7 @@
 'use client'
 
-import { Cafe, FILTERS } from '@/types'
+import { motion } from 'framer-motion'
+import { Cafe, FILTERS, FilterKey } from '@/types'
 import KakaoMap from './KakaoMap'
 import CafeCard from './CafeCard'
 
@@ -9,20 +10,26 @@ interface Props {
   location: string
   activeFilters: Set<string>
   onBack: () => void
+  onToggleFilter: (filter: FilterKey) => void
 }
 
-export default function MainScreen({ cafes, location, activeFilters, onBack }: Props) {
+export default function MainScreen({ cafes, location, activeFilters, onBack, onToggleFilter }: Props) {
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden">
-      {/* 헤더 */}
-      <div className="flex-shrink-0 px-6 pt-14 pb-4">
-        <button
+      <motion.div
+        className="flex-shrink-0 px-6 pt-14 pb-4"
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 180, damping: 24 }}
+      >
+        <motion.button
           onClick={onBack}
-          className="text-black text-sm mb-6 flex items-center gap-1 active:opacity-50"
+          className="text-black text-sm mb-6 flex items-center gap-1"
           style={{ fontWeight: 600 }}
+          whileTap={{ scale: 0.92 }}
         >
           ← 다시 찾기
-        </button>
+        </motion.button>
         <div>
           <p className="text-black leading-tight" style={{ fontSize: 32, fontWeight: 700, fontFamily: 'var(--font-yang)' }}>
             {location}에서
@@ -36,27 +43,30 @@ export default function MainScreen({ cafes, location, activeFilters, onBack }: P
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* 지도 + 하단 카드 */}
       <div className="relative flex-1">
-        {/* 지도 (전체 채움) */}
         <div className="absolute inset-0">
           <KakaoMap cafes={cafes} region={location} />
         </div>
 
-        {/* 하단 흰 카드 */}
-        <div className="absolute bottom-0 left-0 right-0 bg-white" style={{ height: '52%' }}>
-          {/* 필터 태그 (전체 표시) */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 bg-white"
+          style={{ height: '52%' }}
+          initial={{ y: '100%' }}
+          animate={{ y: 0 }}
+          transition={{ type: 'spring', stiffness: 160, damping: 26, delay: 0.15 }}
+        >
           <div className="flex gap-2 overflow-x-auto scrollbar-hide px-6 pt-4 pb-3">
             {FILTERS.map((f) => {
               const active = activeFilters.has(f)
               return (
-                <span
+                <motion.button
                   key={f}
+                  onClick={() => onToggleFilter(f as FilterKey)}
                   className="flex-shrink-0"
                   style={{
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: 600,
                     height: 37,
                     borderRadius: 999,
@@ -67,17 +77,16 @@ export default function MainScreen({ cafes, location, activeFilters, onBack }: P
                     backgroundColor: active ? '#000000' : '#f4f4f4',
                     color: active ? '#ffffff' : '#a3a3a3',
                   }}
+                  whileTap={{ scale: 0.93 }}
                 >
                   {f}
-                </span>
+                </motion.button>
               )
             })}
           </div>
 
-          {/* 구분선 */}
           <div className="border-t border-[#f4f4f4] mx-6" />
 
-          {/* 카페 목록 */}
           <div className="overflow-y-auto scrollbar-hide h-full px-6 pb-8">
             {cafes.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-32">
@@ -86,13 +95,13 @@ export default function MainScreen({ cafes, location, activeFilters, onBack }: P
               </div>
             ) : (
               <div className="flex flex-col divide-y divide-[#f4f4f4]">
-                {cafes.map((cafe) => (
-                  <CafeCard key={cafe.id} cafe={cafe} />
+                {cafes.map((cafe, i) => (
+                  <CafeCard key={cafe.id} cafe={cafe} index={i} />
                 ))}
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   )

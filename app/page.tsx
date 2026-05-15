@@ -38,7 +38,7 @@ export default function Home() {
       <LocationSelect
         selected={location}
         onSelect={handleLocationSelect}
-        onBack={() => setStep('intro')}
+        onBack={() => { setLocation(''); setStep('intro') }}
       />
     )
   }
@@ -49,7 +49,7 @@ export default function Home() {
         selected={filters}
         onToggle={toggleFilter}
         onConfirm={() => setStep('main')}
-        onBack={() => setStep('location')}
+        onBack={() => { setFilters(new Set()); setStep('location') }}
       />
     )
   }
@@ -59,7 +59,8 @@ export default function Home() {
       cafes={matchedCafes}
       location={location}
       activeFilters={filters}
-      onBack={() => setStep('filter')}
+      onBack={() => { setLocation(''); setFilters(new Set()); setStep('intro') }}
+      onToggleFilter={toggleFilter}
     />
   )
 }
