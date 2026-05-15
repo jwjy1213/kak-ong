@@ -14,18 +14,21 @@ interface Props {
   onToggleFilter: (filter: FilterKey) => void
 }
 
+const MAP_HEIGHT = 200
+
 export default function MainScreen({ cafes, location, activeFilters, onBack, onToggleFilter }: Props) {
   const listRef = useRef<HTMLDivElement>(null)
-  const mapWrapRef = useRef<HTMLDivElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const expandedRef = useRef(false)
 
   const handleScroll = () => {
-    if (!listRef.current || !mapWrapRef.current || !cardRef.current) return
+    if (!listRef.current || !cardRef.current) return
     const shouldExpand = listRef.current.scrollTop > 0
     if (shouldExpand === expandedRef.current) return
     expandedRef.current = shouldExpand
-    mapWrapRef.current.style.height = shouldExpand ? '0px' : '200px'
+    cardRef.current.style.transform = shouldExpand
+      ? 'translateY(0px)'
+      : `translateY(${MAP_HEIGHT}px)`
     cardRef.current.style.borderRadius = shouldExpand ? '0' : '20px 20px 0 0'
   }
 
@@ -61,84 +64,79 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
         </div>
       </motion.div>
 
-      {/* 지도 — 스크롤 시 height 0으로 접힘 */}
-      <div
-        ref={mapWrapRef}
-        className="flex-shrink-0 overflow-hidden"
-        style={{
-          height: 200,
-          transition: 'height 0.38s cubic-bezier(0.32, 0.72, 0, 1)',
-        }}
-      >
-        <div style={{ height: 200 }}>
+      {/* 지도 + 카드 */}
+      <div className="relative flex-1 min-h-0 overflow-hidden">
+        {/* 지도 — 항상 상단에 고정 */}
+        <div className="absolute top-0 left-0 right-0" style={{ height: MAP_HEIGHT }}>
           <KakaoMap cafes={cafes} region={location} />
         </div>
-      </div>
 
-      {/* 카드 — 지도가 접히면 자동으로 올라옴 */}
-      <div
-        ref={cardRef}
-        className="flex flex-col flex-1 min-h-0 bg-white"
-        style={{
-          borderRadius: '20px 20px 0 0',
-          boxShadow: '0 -2px 16px rgba(0,0,0,0.08)',
-          transition: 'border-radius 0.38s cubic-bezier(0.32, 0.72, 0, 1)',
-        }}
-      >
-        {/* 핸들 */}
-        <div className="flex justify-center pt-3 pb-2 flex-shrink-0">
-          <div className="w-10 h-1 rounded-full bg-[#d6d6d6]" />
-        </div>
-
-        {/* 필터 태그 */}
-        <div className="flex gap-2 overflow-x-auto scrollbar-hide px-6 pt-1 pb-3 flex-shrink-0">
-          {FILTERS.map((f) => {
-            const active = activeFilters.has(f)
-            return (
-              <motion.button
-                key={f}
-                onClick={() => onToggleFilter(f as FilterKey)}
-                className="flex-shrink-0"
-                style={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                  height: 37,
-                  borderRadius: 999,
-                  padding: '0 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  whiteSpace: 'nowrap',
-                  backgroundColor: active ? '#000000' : '#f4f4f4',
-                  color: active ? '#ffffff' : '#a3a3a3',
-                }}
-                whileTap={{ scale: 0.93 }}
-              >
-                {f}
-              </motion.button>
-            )
-          })}
-        </div>
-
-        <div className="border-t border-[#f4f4f4] mx-6 flex-shrink-0" />
-
-        {/* 카페 리스트 */}
+        {/* 카드 — transform으로 슬라이드 (레이아웃 변경 없음) */}
         <div
-          ref={listRef}
-          onScroll={handleScroll}
-          className="overflow-y-auto scrollbar-hide flex-1 min-h-0 px-6 pb-8"
+          ref={cardRef}
+          className="absolute inset-0 bg-white flex flex-col"
+          style={{
+            transform: `translateY(${MAP_HEIGHT}px)`,
+            transition: 'transform 0.38s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.38s',
+            borderRadius: '20px 20px 0 0',
+            boxShadow: '0 -2px 16px rgba(0,0,0,0.08)',
+          }}
         >
-          {cafes.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32">
-              <p className="text-[#a3a3a3] font-bold text-lg">조건에 맞는 카페가 없어요</p>
-              <p className="text-[#a3a3a3] text-sm mt-1">필터를 줄여보세요</p>
-            </div>
-          ) : (
-            <div className="flex flex-col divide-y divide-[#f4f4f4]">
-              {cafes.map((cafe, i) => (
-                <CafeCard key={cafe.id} cafe={cafe} index={i} />
-              ))}
-            </div>
-          )}
+          {/* 핸들 */}
+          <div className="flex justify-center pt-3 pb-2 flex-shrink-0">
+            <div className="w-10 h-1 rounded-full bg-[#d6d6d6]" />
+          </div>
+
+          {/* 필터 태그 */}
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide px-6 pt-1 pb-3 flex-shrink-0">
+            {FILTERS.map((f) => {
+              const active = activeFilters.has(f)
+              return (
+                <motion.button
+                  key={f}
+                  onClick={() => onToggleFilter(f as FilterKey)}
+                  className="flex-shrink-0"
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 600,
+                    height: 37,
+                    borderRadius: 999,
+                    padding: '0 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    whiteSpace: 'nowrap',
+                    backgroundColor: active ? '#000000' : '#f4f4f4',
+                    color: active ? '#ffffff' : '#a3a3a3',
+                  }}
+                  whileTap={{ scale: 0.93 }}
+                >
+                  {f}
+                </motion.button>
+              )
+            })}
+          </div>
+
+          <div className="border-t border-[#f4f4f4] mx-6 flex-shrink-0" />
+
+          {/* 카페 리스트 */}
+          <div
+            ref={listRef}
+            onScroll={handleScroll}
+            className="overflow-y-auto scrollbar-hide flex-1 min-h-0 px-6 pb-8"
+          >
+            {cafes.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-32">
+                <p className="text-[#a3a3a3] font-bold text-lg">조건에 맞는 카페가 없어요</p>
+                <p className="text-[#a3a3a3] text-sm mt-1">필터를 줄여보세요</p>
+              </div>
+            ) : (
+              <div className="flex flex-col divide-y divide-[#f4f4f4]">
+                {cafes.map((cafe, i) => (
+                  <CafeCard key={cafe.id} cafe={cafe} index={i} />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
