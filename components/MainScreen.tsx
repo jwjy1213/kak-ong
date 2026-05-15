@@ -66,7 +66,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
         <div
           className="absolute bottom-0 left-0 right-0 bg-white flex flex-col"
           style={{
-            height: expanded ? '100%' : '55%',
+            height: expanded ? '100%' : 'calc(100% - 200px)',
             transition: 'height 0.38s cubic-bezier(0.32, 0.72, 0, 1)',
             borderRadius: expanded ? 0 : '20px 20px 0 0',
             boxShadow: '0 -2px 16px rgba(0,0,0,0.08)',
