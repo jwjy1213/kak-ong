@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Cafe, FILTERS, FilterKey } from '@/types'
 import KakaoMap from './KakaoMap'
@@ -15,12 +15,18 @@ interface Props {
 }
 
 export default function MainScreen({ cafes, location, activeFilters, onBack, onToggleFilter }: Props) {
-  const [expanded, setExpanded] = useState(false)
   const listRef = useRef<HTMLDivElement>(null)
+  const mapWrapRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const expandedRef = useRef(false)
 
   const handleScroll = () => {
-    if (!listRef.current) return
-    setExpanded(listRef.current.scrollTop > 0)
+    if (!listRef.current || !mapWrapRef.current || !cardRef.current) return
+    const shouldExpand = listRef.current.scrollTop > 0
+    if (shouldExpand === expandedRef.current) return
+    expandedRef.current = shouldExpand
+    mapWrapRef.current.style.height = shouldExpand ? '0px' : '200px'
+    cardRef.current.style.borderRadius = shouldExpand ? '0' : '20px 20px 0 0'
   }
 
   return (
@@ -57,9 +63,10 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
 
       {/* 지도 — 스크롤 시 height 0으로 접힘 */}
       <div
+        ref={mapWrapRef}
         className="flex-shrink-0 overflow-hidden"
         style={{
-          height: expanded ? 0 : 200,
+          height: 200,
           transition: 'height 0.38s cubic-bezier(0.32, 0.72, 0, 1)',
         }}
       >
@@ -70,9 +77,10 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
 
       {/* 카드 — 지도가 접히면 자동으로 올라옴 */}
       <div
+        ref={cardRef}
         className="flex flex-col flex-1 min-h-0 bg-white"
         style={{
-          borderRadius: expanded ? '0' : '20px 20px 0 0',
+          borderRadius: '20px 20px 0 0',
           boxShadow: '0 -2px 16px rgba(0,0,0,0.08)',
           transition: 'border-radius 0.38s cubic-bezier(0.32, 0.72, 0, 1)',
         }}
