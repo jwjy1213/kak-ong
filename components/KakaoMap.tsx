@@ -104,4 +104,3 @@ export default function KakaoMap({ cafes, region, onMarkerClick }: Props) {
     </div>
   )
 }
-}
