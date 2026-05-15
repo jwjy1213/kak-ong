@@ -14,32 +14,64 @@ interface Props {
   onToggleFilter: (filter: FilterKey) => void
 }
 
-const SHEET_COLLAPSED = '50%'
-const SHEET_EXPANDED = 'calc(100dvh - 200px)'
+const COLLAPSED = '50dvh'
+const EXPANDED = '88dvh'
+const SNAP_THRESHOLD = 0.65  // 65% 넘으면 expanded로 스냅
 
 export default function MainScreen({ cafes, location, activeFilters, onBack, onToggleFilter }: Props) {
-  const listRef = useRef<HTMLDivElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const expandedRef = useRef(false)
+  const dragRef = useRef<{ startY: number; startH: number } | null>(null)
   const [selectedCafe, setSelectedCafe] = useState<Cafe | null>(null)
 
-  const handleScroll = () => {
-    if (!listRef.current || !cardRef.current) return
-    const shouldExpand = listRef.current.scrollTop > 0
-    if (shouldExpand === expandedRef.current) return
-    expandedRef.current = shouldExpand
-    cardRef.current.style.height = shouldExpand ? SHEET_EXPANDED : SHEET_COLLAPSED
-    cardRef.current.style.borderRadius = shouldExpand ? '0' : '20px 20px 0 0'
+  const snapTo = (expand: boolean) => {
+    if (!cardRef.current) return
+    expandedRef.current = expand
+    cardRef.current.style.transition = 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1)'
+    cardRef.current.style.height = expand ? EXPANDED : COLLAPSED
+  }
+
+  const onDragStart = (clientY: number) => {
+    if (!cardRef.current) return
+    cardRef.current.style.transition = 'none'
+    dragRef.current = {
+      startY: clientY,
+      startH: cardRef.current.getBoundingClientRect().height,
+    }
+  }
+
+  const onDragMove = (clientY: number) => {
+    if (!dragRef.current || !cardRef.current) return
+    const delta = dragRef.current.startY - clientY  // 위로 드래그 = 양수
+    const newH = Math.max(120, dragRef.current.startH + delta)
+    cardRef.current.style.height = `${newH}px`
+  }
+
+  const onDragEnd = (clientY: number) => {
+    if (!dragRef.current || !cardRef.current) return
+    const delta = dragRef.current.startY - clientY
+    const currentH = cardRef.current.getBoundingClientRect().height
+    const vh = window.innerHeight
+    // 위로 40px 이상 드래그했거나, 높이가 65% 넘으면 expanded
+    const shouldExpand = delta > 40 || currentH > vh * SNAP_THRESHOLD
+    snapTo(shouldExpand)
+    dragRef.current = null
+  }
+
+  const dragProps = {
+    onTouchStart: (e: React.TouchEvent) => onDragStart(e.touches[0].clientY),
+    onTouchMove: (e: React.TouchEvent) => onDragMove(e.touches[0].clientY),
+    onTouchEnd: (e: React.TouchEvent) => onDragEnd(e.changedTouches[0].clientY),
   }
 
   return (
     <div className="relative overflow-hidden" style={{ height: '100dvh' }}>
-      {/* 지도 — 전체 화면 배경 */}
+      {/* 지도 — 전체 화면 */}
       <div className="absolute inset-0">
         <KakaoMap cafes={cafes} region={location} focusedCafe={selectedCafe} onMarkerClick={setSelectedCafe} />
       </div>
 
-      {/* 헤더 — 지도 위에 플로팅 */}
+      {/* 헤더 — 지도 위 플로팅 */}
       <motion.div
         className="absolute top-0 left-0 right-0 px-6 pt-14 pb-4 bg-white"
         style={{ zIndex: 10 }}
@@ -70,20 +102,23 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
         </div>
       </motion.div>
 
-      {/* 바텀시트 — 지도 위에 플로팅 */}
+      {/* 바텀시트 — 지도 위 플로팅, 드래그로 expand/collapse */}
       <div
         ref={cardRef}
         className="absolute bottom-0 left-0 right-0 bg-white flex flex-col overflow-hidden"
         style={{
-          height: SHEET_COLLAPSED,
+          height: COLLAPSED,
           borderRadius: '20px 20px 0 0',
           boxShadow: '0 -4px 20px rgba(0,0,0,0.10)',
           zIndex: 10,
-          transition: 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.35s',
         }}
       >
-        {/* 핸들 */}
-        <div className="flex justify-center pt-3 pb-2 flex-shrink-0">
+        {/* 핸들 — 드래그 영역 */}
+        <div
+          {...dragProps}
+          className="flex justify-center pt-3 pb-4 flex-shrink-0"
+          style={{ touchAction: 'none' }}
+        >
           <div className="w-10 h-1 rounded-full bg-[#d6d6d6]" />
         </div>
 
@@ -120,9 +155,8 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
 
         {/* 카페 리스트 */}
         <div
-          ref={listRef}
-          onScroll={handleScroll}
           className="overflow-y-auto scrollbar-hide flex-1 px-6 pb-8"
+          style={{ overscrollBehavior: 'contain' }}
         >
           {cafes.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-32">
