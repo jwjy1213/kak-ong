@@ -21,7 +21,7 @@ const listItem = {
 
 export default function LocationSelect({ selected, onSelect, onBack }: Props) {
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col bg-white" style={{ height: '100dvh' }}>
       <motion.div
         className="px-6 pt-14 pb-4"
         initial={{ opacity: 0, y: -12 }}
