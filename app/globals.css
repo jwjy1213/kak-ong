@@ -5,6 +5,13 @@
   --foreground: #000000;
 }
 
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 body {
   background: #e8e8e8;
   color: var(--foreground);

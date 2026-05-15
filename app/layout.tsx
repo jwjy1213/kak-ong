@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={`h-full ${pretendard.variable} ${yangGuGothic.variable}`}>
       <body className="h-full bg-[#e8e8e8] antialiased" style={{ fontFamily: 'var(--font-pretendard), sans-serif' }}>
-        <div className="relative mx-auto min-h-screen bg-white overflow-hidden" style={{ maxWidth: 430 }}>
+        <div className="relative mx-auto bg-white overflow-hidden" style={{ maxWidth: 430, height: '100dvh' }}>
           {children}
         </div>
       </body>
