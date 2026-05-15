@@ -52,7 +52,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
       </div>
 
       {/* 리스트 영역 — 나머지 전부 채움 */}
-      <div className="flex flex-col flex-1 overflow-hidden bg-white">
+      <div className="flex flex-col flex-1 min-h-0 overflow-hidden bg-white">
         <div className="flex gap-2 overflow-x-auto scrollbar-hide px-6 pt-4 pb-3 flex-shrink-0">
           {FILTERS.map((f) => {
             const active = activeFilters.has(f)
