@@ -129,7 +129,7 @@ export function filterCafes(
 
     for (const filter of filters) {
       switch (filter) {
-        case '콘센트가 있어요':
+        case '콘센트가 있으면 좋겠어요':
           if (cafe.outlet === 'none') return false
           break
         case '제한시간이 없었으면 좋겠어요':

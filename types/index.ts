@@ -23,7 +23,7 @@ export interface Cafe {
 export type Step = 'intro' | 'location' | 'filter' | 'main'
 
 export type FilterKey =
-  | '콘센트가 있어요'
+  | '콘센트가 있으면 좋겠어요'
   | '제한시간이 없었으면 좋겠어요'
   | '밝은곳이 좋아요'
   | '와이파이가 있어요'
@@ -40,7 +40,7 @@ export const REGIONS = [
 ] as const
 
 export const FILTERS: FilterKey[] = [
-  '콘센트가 있어요',
+  '콘센트가 있으면 좋겠어요',
   '제한시간이 없었으면 좋겠어요',
   '밝은곳이 좋아요',
   '와이파이가 있어요',

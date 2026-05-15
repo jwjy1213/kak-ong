@@ -16,16 +16,16 @@ export default function FilterSelect({ selected, onToggle, onConfirm, onBack }: 
         <button
           onClick={onBack}
           className="text-black text-sm mb-8 flex items-center gap-1 active:opacity-50"
-          style={{ fontWeight: 700 }}
+          style={{ fontWeight: 600 }}
         >
           ← 뒤로
         </button>
-        <h2 className="text-black" style={{ fontSize: 28, fontWeight: 700 }}>
+        <h2 className="text-black" style={{ fontSize: 32, fontWeight: 700 }}>
           필터를 선택해주세요
         </h2>
       </div>
 
-      <div className="flex-1 px-6 flex flex-col gap-5 pb-32">
+      <div className="flex-1 px-6 flex flex-col gap-0 pb-32">
         {FILTERS.map((filter) => {
           const isSelected = selected.has(filter)
           return (
@@ -34,12 +34,11 @@ export default function FilterSelect({ selected, onToggle, onConfirm, onBack }: 
               onClick={() => onToggle(filter)}
               className="w-full text-left px-5 flex items-center transition-all active:opacity-70"
               style={{
-                height: 86,
-                borderRadius: 12,
+                height: 80,
                 backgroundColor: isSelected ? '#ffffff' : '#f4f4f4',
                 border: isSelected ? '1px solid #000000' : '1px solid transparent',
-                fontSize: 24,
-                fontWeight: 700,
+                fontSize: 16,
+                fontWeight: 600,
                 color: '#000000',
               }}
             >
@@ -53,7 +52,7 @@ export default function FilterSelect({ selected, onToggle, onConfirm, onBack }: 
         <button
           onClick={onConfirm}
           className="w-full bg-black text-white flex items-center justify-center active:opacity-70 transition-opacity"
-          style={{ height: 84, fontSize: 24, fontWeight: 700 }}
+          style={{ height: 84, fontSize: 20, fontWeight: 700 }}
         >
           다 선택했어요
         </button>

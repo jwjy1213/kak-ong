@@ -7,7 +7,15 @@ interface Props {
 export default function IntroScreen({ onStart }: Props) {
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-white px-6 py-16">
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center justify-center gap-0">
+        <div className="flex flex-col items-center mb-4">
+          <p className="text-black" style={{ fontSize: 23, fontWeight: 400 }}>
+            =^•ﻌ•^=
+          </p>
+          <p className="text-black" style={{ fontSize: 14, fontWeight: 600 }}>
+            공부할 카페 찾기 서비스
+          </p>
+        </div>
         <h1
           className="text-black text-center leading-tight"
           style={{ fontSize: 76, fontWeight: 700, letterSpacing: '-0.02em' }}
@@ -17,10 +25,10 @@ export default function IntroScreen({ onStart }: Props) {
       </div>
       <button
         onClick={onStart}
-        className="w-full bg-black text-white text-xl font-bold py-5 active:opacity-70 transition-opacity"
-        style={{ fontWeight: 700 }}
+        className="w-full bg-black text-white flex items-center justify-center active:opacity-70 transition-opacity"
+        style={{ height: 84, fontSize: 20, fontWeight: 700 }}
       >
-        시작하기
+        칵옹하러 가기
       </button>
     </div>
   )
