@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import Script from 'next/script'
 import './globals.css'
 
 const yangGuGothic = localFont({
@@ -15,17 +14,9 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_MAPS_KEY
-
   return (
     <html lang="ko" className={`h-full ${yangGuGothic.variable}`}>
       <body className="h-full bg-white antialiased" style={{ fontFamily: 'var(--font-yang), sans-serif' }}>
-        {kakaoKey && (
-          <Script
-            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoKey}&autoload=false`}
-            strategy="beforeInteractive"
-          />
-        )}
         {children}
       </body>
     </html>
