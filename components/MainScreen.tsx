@@ -50,12 +50,9 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
           <KakaoMap cafes={cafes} region={location} />
         </div>
 
-        <motion.div
+        <div
           className="absolute bottom-0 left-0 right-0 bg-white"
-          style={{ height: '65%' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.15 }}
+          style={{ height: '65%', zIndex: 10 }}
         >
           <div className="flex gap-2 overflow-x-auto scrollbar-hide px-6 pt-4 pb-3">
             {FILTERS.map((f) => {
@@ -101,7 +98,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
               </div>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   )
