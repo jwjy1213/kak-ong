@@ -37,13 +37,18 @@ function num(prop: any): number {
 async function geocode(name: string, address: string): Promise<{ lat: number; lng: number } | null> {
   const key = process.env.KAKAO_REST_API_KEY
   if (!key) return null
-  const query = encodeURIComponent(`${name} ${address}`)
-  const res = await fetch(
-    `https://dapi.kakao.com/v2/local/search/keyword.json?query=${query}&size=1`,
-    { headers: { Authorization: `KakaoAK ${key}` } }
-  )
-  const data = await res.json() as { documents?: { x: string; y: string }[] }
-  const doc = data.documents?.[0]
+
+  const search = async (query: string) => {
+    const res = await fetch(
+      `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodeURIComponent(query)}&size=1`,
+      { headers: { Authorization: `KakaoAK ${key}` } }
+    )
+    const data = await res.json() as { documents?: { x: string; y: string }[] }
+    return data.documents?.[0] ?? null
+  }
+
+  // 이름만으로 먼저 시도, 실패 시 이름+주소로 재시도
+  const doc = await search(name) ?? await search(`${name} ${address}`)
   if (!doc) return null
   return { lat: parseFloat(doc.y), lng: parseFloat(doc.x) }
 }
