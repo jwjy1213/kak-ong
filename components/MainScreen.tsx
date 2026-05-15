@@ -42,8 +42,11 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
 
   const onDragMove = (clientY: number) => {
     if (!dragRef.current || !cardRef.current) return
-    const delta = dragRef.current.startY - clientY  // 위로 드래그 = 양수
-    const newH = Math.max(120, dragRef.current.startH + delta)
+    const delta = dragRef.current.startY - clientY
+    const vh = window.innerHeight
+    const minH = vh * 0.5   // 50dvh — 최솟값
+    const maxH = vh * 0.88  // 88dvh — 최댓값
+    const newH = Math.min(maxH, Math.max(minH, dragRef.current.startH + delta))
     cardRef.current.style.height = `${newH}px`
   }
 
