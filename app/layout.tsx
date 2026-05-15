@@ -26,6 +26,10 @@ export const metadata: Metadata = {
   description: '지역과 조건으로 나에게 딱 맞는 카공 카페를 찾아보세요.',
 }
 
+export const viewport = {
+  viewportFit: 'cover',
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={`h-full ${pretendard.variable} ${yangGuGothic.variable}`}>

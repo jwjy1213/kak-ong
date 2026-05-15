@@ -61,7 +61,7 @@ export default function IntroScreen({ onStart }: Props) {
       <motion.button
         onClick={onStart}
         className="w-full bg-black text-white flex items-center justify-center flex-shrink-0"
-        style={{ height: 84, fontSize: 20, fontWeight: 700 }}
+        style={{ height: 84, fontSize: 20, fontWeight: 700, paddingBottom: 'env(safe-area-inset-bottom)' }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 160, damping: 22, delay: 0.7 }}

@@ -78,7 +78,7 @@ export default function FilterSelect({ selected, onToggle, onConfirm, onBack }: 
       <motion.button
         onClick={onConfirm}
         className="flex-shrink-0 w-full bg-black text-white flex items-center justify-center"
-        style={{ height: 84, fontSize: 20, fontWeight: 700 }}
+        style={{ height: 84, fontSize: 20, fontWeight: 700, paddingBottom: 'env(safe-area-inset-bottom)' }}
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 160, damping: 22, delay: 0.55 }}
