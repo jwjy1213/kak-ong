@@ -14,7 +14,8 @@ interface Props {
   onToggleFilter: (filter: FilterKey) => void
 }
 
-const MAP_HEIGHT = 200
+// 지도가 보이는 높이 (px) — 이 만큼만 위에 남고 카드가 덮음
+const MAP_PEEK = 80
 
 export default function MainScreen({ cafes, location, activeFilters, onBack, onToggleFilter }: Props) {
   const listRef = useRef<HTMLDivElement>(null)
@@ -26,9 +27,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
     const shouldExpand = listRef.current.scrollTop > 0
     if (shouldExpand === expandedRef.current) return
     expandedRef.current = shouldExpand
-    cardRef.current.style.transform = shouldExpand
-      ? 'translateY(0px)'
-      : `translateY(${MAP_HEIGHT}px)`
+    cardRef.current.style.height = shouldExpand ? '100%' : `calc(100% - ${MAP_PEEK}px)`
     cardRef.current.style.borderRadius = shouldExpand ? '0' : '20px 20px 0 0'
   }
 
@@ -64,22 +63,22 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
         </div>
       </motion.div>
 
-      {/* 지도 + 카드 */}
-      <div className="relative flex-1 min-h-0 overflow-hidden">
-        {/* 지도 — 항상 상단에 고정 */}
-        <div className="absolute top-0 left-0 right-0" style={{ height: MAP_HEIGHT }}>
+      {/* 지도 + 바텀시트 */}
+      <div className="relative flex-1 min-h-0">
+        {/* 지도 — 항상 배경에 가득 */}
+        <div className="absolute inset-0">
           <KakaoMap cafes={cafes} region={location} />
         </div>
 
-        {/* 카드 — transform으로 슬라이드 (레이아웃 변경 없음) */}
+        {/* 바텀시트 카드 — 초기에 MAP_PEEK만 남기고 덮음 */}
         <div
           ref={cardRef}
-          className="absolute inset-0 bg-white flex flex-col"
+          className="absolute bottom-0 left-0 right-0 bg-white flex flex-col overflow-hidden"
           style={{
-            transform: `translateY(${MAP_HEIGHT}px)`,
-            transition: 'transform 0.38s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.38s',
+            height: `calc(100% - ${MAP_PEEK}px)`,
             borderRadius: '20px 20px 0 0',
-            boxShadow: '0 -2px 16px rgba(0,0,0,0.08)',
+            boxShadow: '0 -4px 20px rgba(0,0,0,0.10)',
+            transition: 'height 0.35s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.35s',
           }}
         >
           {/* 핸들 */}
@@ -122,7 +121,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
           <div
             ref={listRef}
             onScroll={handleScroll}
-            className="overflow-y-auto scrollbar-hide flex-1 min-h-0 px-6 pb-8"
+            className="overflow-y-auto scrollbar-hide flex-1 px-6 pb-8"
           >
             {cafes.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-32">
