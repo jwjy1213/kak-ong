@@ -18,7 +18,7 @@ export const cafes: Cafe[] = [
     "memo": "문래 창작촌 근처, 책 읽기 좋은 분위기. 콘센트 자리 많고 창가 자리 추천.",
     "hours": "10:00 - 22:00",
     "status": "active",
-    "created_at": "2026-05-15T16:27:58.123Z"
+    "created_at": "2026-05-15T16:52:02.310Z"
   },
   {
     "id": "어니언-성수",
@@ -37,7 +37,7 @@ export const cafes: Cafe[] = [
     "memo": "분위기 좋지만 주말엔 혼잡. 평일 오전 추천.",
     "hours": "08:00 - 22:00",
     "status": "active",
-    "created_at": "2026-05-15T16:27:58.123Z"
+    "created_at": "2026-05-15T16:52:02.311Z"
   },
   {
     "id": "커피한약방",
@@ -56,7 +56,7 @@ export const cafes: Cafe[] = [
     "memo": "1인 좌석 많아서 혼자 오기 좋음. 콘센트 넉넉.",
     "hours": "11:00 - 21:00",
     "status": "active",
-    "created_at": "2026-05-15T16:27:58.123Z"
+    "created_at": "2026-05-15T16:52:02.311Z"
   },
   {
     "id": "카페-도토리",
@@ -75,7 +75,7 @@ export const cafes: Cafe[] = [
     "memo": "강남 직장인들이 자주 찾는 카공 성지. 항상 자리 경쟁 있으니 평일 오전 추천.",
     "hours": "07:30 - 21:00",
     "status": "active",
-    "created_at": "2026-05-15T16:27:58.123Z"
+    "created_at": "2026-05-15T16:52:02.311Z"
   },
   {
     "id": "블루보틀-한남",
@@ -94,7 +94,7 @@ export const cafes: Cafe[] = [
     "memo": "2시간 제한 있음. 분위기 좋지만 카공보다 미팅에 더 적합.",
     "hours": "08:00 - 21:00",
     "status": "active",
-    "created_at": "2026-05-15T16:27:58.123Z"
+    "created_at": "2026-05-15T16:52:02.311Z"
   },
   {
     "id": "문래-카페-언노운",
@@ -113,7 +113,7 @@ export const cafes: Cafe[] = [
     "memo": "아늑한 조명, 혼자 집중하기 좋음. 뮤직이 조용한 편.",
     "hours": "12:00 - 22:00",
     "status": "active",
-    "created_at": "2026-05-15T16:27:58.123Z"
+    "created_at": "2026-05-15T16:52:02.311Z"
   },
   {
     "id": "텀어스-연희",
@@ -132,7 +132,7 @@ export const cafes: Cafe[] = [
     "memo": "수원에서 연희동에 2호점을 새롭게 오픈.",
     "hours": "10:00 - 23:00",
     "status": "active",
-    "created_at": "2026-05-15T16:27:58.123Z"
+    "created_at": "2026-05-15T16:52:02.311Z"
   },
   {
     "id": "비바보사",
@@ -150,7 +150,7 @@ export const cafes: Cafe[] = [
     "single_seat": true,
     "hours": "10:00 - 23:00",
     "status": "active",
-    "created_at": "2026-05-15T16:27:58.123Z"
+    "created_at": "2026-05-15T16:52:02.311Z"
   }
 ]
 
