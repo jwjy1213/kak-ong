@@ -104,8 +104,13 @@ export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: 
       bounds.extend(position)
     })
 
-    mapRef.current.setBounds(bounds)
-    mapRef.current.setLevel(8)
+    if (cafes.length === 1) {
+      mapRef.current.setCenter(new window.kakao.maps.LatLng(cafes[0].lat, cafes[0].lng))
+      mapRef.current.setLevel(4)
+    } else {
+      mapRef.current.setBounds(bounds)
+      mapRef.current.setLevel(8)
+    }
   }, [cafes, status, region])
 
   // 카페 선택 시 포커스
