@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image-v2.png',
         width: 1200,
         height: 630,
         alt: '칵옹 — 카공하기 좋은 카페 찾기',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: '칵옹 — 카공하기 좋은 카페 찾기',
     description: '지역과 조건으로 나에게 딱 맞는 카공 카페를 찾아보세요.',
-    images: ['/og-image.png'],
+    images: ['/og-image-v2.png'],
   },
   verification: {
     google: 'uviz2GOrby34clhLLlS4HF-iUrYsjRDzo9S1MetRgMU',
