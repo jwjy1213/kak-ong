@@ -59,6 +59,7 @@ export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: 
             mapRef.current = map
             setStatus('ok')
 
+            const bounds = new window.kakao.maps.LatLngBounds()
             cafes.forEach((cafe) => {
               const position = new window.kakao.maps.LatLng(cafe.lat, cafe.lng)
               const marker = new window.kakao.maps.Marker({ position, map })
@@ -69,7 +70,9 @@ export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: 
                 infoWindow.open(map, marker)
                 onMarkerClick?.(cafe)
               })
+              bounds.extend(position)
             })
+            if (cafes.length > 0) map.setBounds(bounds)
           } catch (e) {
             setStatus('error')
             setErrorMsg(String(e))

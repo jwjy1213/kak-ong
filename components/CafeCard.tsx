@@ -34,6 +34,7 @@ export default function CafeCard({ cafe, index = 0, selected = false, onSelect }
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 180, damping: 24, delay: index * 0.09 }}
       onClick={onSelect}
+      onTouchStart={(e) => e.stopPropagation()}
     >
       <p className="text-black" style={{ fontSize: 24, fontWeight: 700, fontFamily: 'var(--font-yang)' }}>
         {cafe.name}
