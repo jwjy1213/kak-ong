@@ -22,6 +22,8 @@ type SheetState = 'filter' | 'default' | 'expanded'
 export default function MainScreen({ cafes, location, activeFilters, onBack, onToggleFilter }: Props) {
   const cardRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const cafeRefs = useRef<Map<string, HTMLDivElement>>(new Map())
   const dragRef = useRef<{ startY: number; startH: number } | null>(null)
   const [selectedCafe, setSelectedCafe] = useState<Cafe | null>(null)
   const [sheetState, setSheetState] = useState<SheetState>('default')
@@ -162,6 +164,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
 
         {/* 카페 리스트 */}
         <div
+          ref={scrollRef}
           className="scrollbar-hide flex-1 px-4 pb-8"
           style={{
             overflowY: sheetState === 'expanded' ? 'auto' : 'hidden',
@@ -178,13 +181,26 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
           ) : (
             <div className="flex flex-col divide-y divide-[#f4f4f4]">
               {cafes.map((cafe, i) => (
-                <CafeCard
+                <div
                   key={cafe.id}
-                  cafe={cafe}
-                  index={i}
-                  selected={selectedCafe?.id === cafe.id}
-                  onSelect={() => { setSelectedCafe(prev => prev?.id === cafe.id ? null : cafe); snapTo('default') }}
-                />
+                  ref={(el) => { el ? cafeRefs.current.set(cafe.id, el) : cafeRefs.current.delete(cafe.id) }}
+                >
+                  <CafeCard
+                    cafe={cafe}
+                    index={i}
+                    selected={selectedCafe?.id === cafe.id}
+                    onSelect={() => {
+                      const isDeselect = selectedCafe?.id === cafe.id
+                      setSelectedCafe(isDeselect ? null : cafe)
+                      if (!isDeselect) {
+                        snapTo('expanded')
+                        setTimeout(() => {
+                          cafeRefs.current.get(cafe.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }, 360)
+                      }
+                    }}
+                  />
+                </div>
               ))}
             </div>
           )}
