@@ -86,8 +86,13 @@ export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: 
   }, [cafes, region, onMarkerClick])
 
   useEffect(() => {
-    if (!focusedCafe || !mapRef.current) return
+    if (!mapRef.current) return
+    if (!focusedCafe) {
+      mapRef.current.setLevel(4)
+      return
+    }
     const position = new window.kakao.maps.LatLng(focusedCafe.lat, focusedCafe.lng)
+    mapRef.current.setLevel(2)
     mapRef.current.panTo(position)
   }, [focusedCafe])
 
