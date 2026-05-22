@@ -74,7 +74,7 @@ export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: 
             })
             if (cafes.length > 0) {
               map.setBounds(bounds)
-              map.setLevel(6)
+              map.setLevel(8)
             }
           } catch (e) {
             setStatus('error')
