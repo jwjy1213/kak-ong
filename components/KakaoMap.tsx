@@ -36,16 +36,21 @@ function loadKakaoScript(): Promise<void> {
 export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<any>(null)
+  const markersRef = useRef<any[]>([])
+  const onMarkerClickRef = useRef(onMarkerClick)
   const [status, setStatus] = useState<'loading' | 'ok' | 'error'>('loading')
   const [errorMsg, setErrorMsg] = useState('')
 
+  onMarkerClickRef.current = onMarkerClick
+
+  // 지도 초기화 — region 바뀔 때만
   useEffect(() => {
     if (!containerRef.current || !apiKey) {
       setStatus('error')
       setErrorMsg('API 키 없음')
       return
     }
-
+    setStatus('loading')
     loadKakaoScript()
       .then(() => {
         window.kakao.maps.load(() => {
@@ -54,28 +59,10 @@ export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: 
             const center = REGION_COORDS[region] ?? { lat: 37.5665, lng: 126.9780 }
             const map = new window.kakao.maps.Map(containerRef.current, {
               center: new window.kakao.maps.LatLng(center.lat, center.lng),
-              level: 4,
+              level: 8,
             })
             mapRef.current = map
             setStatus('ok')
-
-            const bounds = new window.kakao.maps.LatLngBounds()
-            cafes.forEach((cafe) => {
-              const position = new window.kakao.maps.LatLng(cafe.lat, cafe.lng)
-              const marker = new window.kakao.maps.Marker({ position, map })
-              const infoWindow = new window.kakao.maps.InfoWindow({
-                content: `<div style="padding:6px 10px;font-size:13px;font-weight:700;">${cafe.name}</div>`,
-              })
-              window.kakao.maps.event.addListener(marker, 'click', () => {
-                infoWindow.open(map, marker)
-                onMarkerClick?.(cafe)
-              })
-              bounds.extend(position)
-            })
-            if (cafes.length > 0) {
-              map.setBounds(bounds)
-              map.setLevel(8)
-            }
           } catch (e) {
             setStatus('error')
             setErrorMsg(String(e))
@@ -86,8 +73,42 @@ export default function KakaoMap({ cafes, region, focusedCafe, onMarkerClick }: 
         setStatus('error')
         setErrorMsg(String(e))
       })
-  }, [cafes, region, onMarkerClick])
+  }, [region])
 
+  // 마커 업데이트 — cafes 바뀔 때마다
+  useEffect(() => {
+    if (!mapRef.current || status !== 'ok') return
+
+    markersRef.current.forEach(m => m.setMap(null))
+    markersRef.current = []
+
+    if (cafes.length === 0) {
+      const center = REGION_COORDS[region] ?? { lat: 37.5665, lng: 126.9780 }
+      mapRef.current.setCenter(new window.kakao.maps.LatLng(center.lat, center.lng))
+      mapRef.current.setLevel(8)
+      return
+    }
+
+    const bounds = new window.kakao.maps.LatLngBounds()
+    cafes.forEach((cafe) => {
+      const position = new window.kakao.maps.LatLng(cafe.lat, cafe.lng)
+      const marker = new window.kakao.maps.Marker({ position, map: mapRef.current! })
+      const infoWindow = new window.kakao.maps.InfoWindow({
+        content: `<div style="padding:6px 10px;font-size:13px;font-weight:700;">${cafe.name}</div>`,
+      })
+      window.kakao.maps.event.addListener(marker, 'click', () => {
+        infoWindow.open(mapRef.current!, marker)
+        onMarkerClickRef.current?.(cafe)
+      })
+      markersRef.current.push(marker)
+      bounds.extend(position)
+    })
+
+    mapRef.current.setBounds(bounds)
+    mapRef.current.setLevel(8)
+  }, [cafes, status, region])
+
+  // 카페 선택 시 포커스
   useEffect(() => {
     if (!mapRef.current) return
     if (!focusedCafe) {
