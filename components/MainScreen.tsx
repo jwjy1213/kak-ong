@@ -183,7 +183,7 @@ export default function MainScreen({ cafes, location, activeFilters, onBack, onT
                   cafe={cafe}
                   index={i}
                   selected={selectedCafe?.id === cafe.id}
-                  onSelect={() => setSelectedCafe(prev => prev?.id === cafe.id ? null : cafe)}
+                  onSelect={() => { setSelectedCafe(prev => prev?.id === cafe.id ? null : cafe); snapTo('default') }}
                 />
               ))}
             </div>
