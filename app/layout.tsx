@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const pretendard = localFont({
@@ -99,6 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="relative mx-auto bg-white overflow-hidden" style={{ maxWidth: 430, height: '100dvh' }}>
           {children}
         </div>
+        <Analytics />
       </body>
     </html>
   )
