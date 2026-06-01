@@ -26,15 +26,15 @@ const BASE_URL = 'https://kak-ong.vercel.app'
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: '칵옹 — 카공하기 좋은 카페 찾기',
-  description: '지역과 조건으로 나에게 딱 맞는 카공 카페를 찾아보세요. 콘센트, 와이파이, 조용한 분위기 등 원하는 조건의 카페를 바로 찾아보세요.',
-  keywords: ['카공카페', '카공', '카페', '공부카페', '스터디카페', '칵옹', '카공하기좋은카페', '카페추천'],
+  title: '카공 카페 찾기 — 칵옹',
+  description: '카공 카페 찾기, 이제 칵옹에서 간단하게. 지역과 조건(콘센트, 와이파이, 조용한 분위기)으로 나에게 딱 맞는 카공 카페를 바로 찾아보세요.',
+  keywords: ['카공 카페 찾기', '카공카페', '카공', '카페', '공부카페', '스터디카페', '칵옹', '카공하기좋은카페', '카페추천'],
   alternates: {
     canonical: BASE_URL,
   },
   openGraph: {
-    title: '칵옹 — 카공하기 좋은 카페 찾기',
-    description: '지역과 조건으로 나에게 딱 맞는 카공 카페를 찾아보세요.',
+    title: '카공 카페 찾기 — 칵옹',
+    description: '카공 카페 찾기, 이제 칵옹에서 간단하게. 지역과 조건으로 나에게 딱 맞는 카공 카페를 바로 찾아보세요.',
     url: BASE_URL,
     siteName: '칵옹',
     locale: 'ko_KR',
@@ -50,8 +50,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '칵옹 — 카공하기 좋은 카페 찾기',
-    description: '지역과 조건으로 나에게 딱 맞는 카공 카페를 찾아보세요.',
+    title: '카공 카페 찾기 — 칵옹',
+    description: '카공 카페 찾기, 이제 칵옹에서 간단하게. 지역과 조건으로 나에게 딱 맞는 카공 카페를 바로 찾아보세요.',
     images: ['/og-image-v2.png'],
   },
   verification: {
